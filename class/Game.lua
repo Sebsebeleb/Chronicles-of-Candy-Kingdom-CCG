@@ -91,6 +91,8 @@ end
 
 function _M:newGame()
 	self.player = Player.new{name=self.player_name, game_ender=true}
+	self.opponent = Player.new{name="enemy"}
+	self.opponent.player = false
 	Map:setViewerActor(self.player)
 	self:setupDisplayMode()
 
@@ -103,6 +105,9 @@ function _M:newGame()
 		self.player.energy.value = self.energy_to_act
 		self.paused = true
 		self.creating_player = false
+
+		-- Add the opposing player to the map
+		Zone:addEntity(self.level, self.opponent, "actor", 5, 5)
 		print("[PLAYER BIRTH] resolved!")
 	end)
 	self:registerDialog(birth)
