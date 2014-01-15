@@ -42,6 +42,7 @@ local FlyingText = require "engine.FlyingText"
 local Tooltip = require "engine.Tooltip"
 
 local QuitDialog = require "mod.dialogs.Quit"
+local Network = require "mod.class.Network"
 
 module(..., package.seeall, class.inherit(engine.GameTurnBased, engine.interface.GameTargeting))
 
@@ -245,6 +246,9 @@ function _M:display(nb_keyframe)
 
 	-- Tooltip is displayed over all else
 	self:targetDisplayTooltip()
+
+	-- Look for networking messages
+	Network.receive()
 
 	engine.GameTurnBased.display(self, nb_keyframe)
 end

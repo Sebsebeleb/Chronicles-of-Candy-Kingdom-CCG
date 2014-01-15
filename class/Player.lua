@@ -143,7 +143,8 @@ end
 
 --- Tries to get a target from the user
 function _M:getTarget(typ)
-	return game:targetGetForPlayer(typ)
+	local x, y, target = game:targetGetForPlayer(typ)
+	return x, y, target
 end
 
 --- Sets the current target

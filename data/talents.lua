@@ -27,12 +27,13 @@ newTalent{
 	power = 2,
 	range = 1,
 	action = function(self, t)
-		local tg = {type="hit", range=self:getTalentRange(t)}
-		local x, y, target = self:getTarget(tg)
-		if not x or not y or not target then return nil end
-		if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
+		--local tg = {type="hit", range=self:getTalentRange(t)}
+		--local x, y, target = self:getTarget(tg)
+		--if not x or not y or not target then return nil end
+		--if core.fov.distance(self.x, self.y, x, y) > 1 then return nil end
 
-		target:knockback(self.x, self.y, 2 + self:getDex())
+		--target:knockback(self.x, self.y, 2 + self:getDex())
+		game.log("I used test talent")
 		return true
 	end,
 	info = function(self, t)

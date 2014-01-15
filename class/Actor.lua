@@ -30,6 +30,7 @@ require "engine.interface.ActorResource"
 require "engine.interface.ActorFOV"
 require "mod.class.interface.Combat"
 local Map = require "engine.Map"
+local Network = require "mod.class.Network"
 
 module(..., package.seeall, class.inherit(
 	engine.Actor,
@@ -210,6 +211,14 @@ function _M:postUseTalent(ab, ret)
 		if ab.power then
 			self:incPower(-ab.power)
 		end
+	end
+
+	if self.player then
+
+		who = tostring(self.uid)
+		talent = tostring(ab.id)
+
+		Network.send(who.."|"..talent)
 	end
 
 	return true
