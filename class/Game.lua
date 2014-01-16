@@ -31,6 +31,7 @@ local Birther = require "engine.Birther"
 local Grid = require "mod.class.Grid"
 local Actor = require "mod.class.Actor"
 local Player = require "mod.class.Player"
+local Opponent = require "mod.class.Opponent"
 local NPC = require "mod.class.NPC"
 
 local HotkeysDisplay = require "engine.HotkeysDisplay"
@@ -47,7 +48,7 @@ local Network = require "mod.class.Network"
 module(..., package.seeall, class.inherit(engine.GameTurnBased, engine.interface.GameTargeting))
 
 function _M:init()
-	engine.GameTurnBased.init(self, engine.KeyBind.new(), 1000, 100)
+	engine.GameTurnBased.init(self, engine.KeyBind.new(), 1, 1)
 
 	-- Pause at birth
 	self.paused = true
@@ -91,9 +92,9 @@ function _M:run()
 end
 
 function _M:newGame()
-	self.player = Player.new{name=self.player_name, game_ender=true}
-	self.opponent = Player.new{name="enemy"}
-	self.opponent.player = false
+	self.opponent = Opponent.new{name="Player 2"}
+	self.player = Player.new{name=self.player_name, game_ender=true, player=true}
+	
 	Map:setViewerActor(self.player)
 	self:setupDisplayMode()
 
@@ -107,10 +108,12 @@ function _M:newGame()
 		self.paused = true
 		self.creating_player = false
 
-		-- Add the opposing player to the map
-		Zone:addEntity(self.level, self.opponent, "actor", 5, 5)
+		
 		print("[PLAYER BIRTH] resolved!")
 	end)
+	self:changeLevel(1, "dungeon")
+	-- Add the opposing player to the map
+	Zone:addEntity(self.level, self.opponent, "actor", 5, 5)
 	self:registerDialog(birth)
 end
 

@@ -27,6 +27,11 @@ local ActorAI = require "engine.interface.ActorAI"
 local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
 local Birther = require "engine.Birther"
+local Faction = require "engine.Faction"
+
+-- Setupd simple factions
+Faction:add{ name="player_1", reaction={player_2=-100} }
+Faction:add{ name="player_2", reaction={player_1=-100} }
 
 -- Useful keybinds
 KeyBind:load("move,hotkeys,inventory,actions,interface,debug")

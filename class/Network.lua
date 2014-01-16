@@ -42,10 +42,26 @@ end
 
 function handle_data(data)
 	local match = string.split(data, "|")
-	local who = tonumber(match[1])
-	local talent = match[2]
+	local command = match[1]
+	
 
+	if command == "ENDTURN" then
+		game:tick()
+	elseif commannd == "USETALENT" then
+		local who = tonumber(match[2])
+		local talent = match[3]
+		local target = match[4] --must have both x and y coordinate
+		if target then
+			local pos = string.split(target ",")
+			target = {x=pos[1],y=pos[2]}
+		end
 
-	local actor = __uids[who]
-	actor:useTalent(talent)
+		local actor = __uids[who]
+
+		actor:useTalent(talent, {force_target=target})
+	end
+end
+
+function end_turn()
+	send("ENDTURN")
 end

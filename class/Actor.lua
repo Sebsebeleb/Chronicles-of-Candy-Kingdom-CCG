@@ -218,7 +218,7 @@ function _M:postUseTalent(ab, ret)
 		who = tostring(self.uid)
 		talent = tostring(ab.id)
 
-		Network.send(who.."|"..talent)
+		Network.send("USETALENT".."|"..who.."|"..talent)
 	end
 
 	return true
