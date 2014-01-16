@@ -18,37 +18,39 @@
 -- darkgod@te4.org
 
 newEntity{
-	define_as = "UP_WILDERNESS",
-	name = "exit to the wilds",
-	display = '<', color_r=255, color_g=0, color_b=255, back_color=colors.DARK_GREY,
-	always_remember = true,
-	notice = true,
-	change_level = 1,
-	change_zone = "wilderness",
+	define_as = "FLOOR_ZONE_1",
+	name = "player 1's zone", image = "terrain/marble_floor.png",
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.ROYAL_BLUE,
 }
 
 newEntity{
-	define_as = "UP",
-	name = "previous level",
-	display = '<', color_r=255, color_g=255, color_b=0, back_color=colors.DARK_GREY,
-	notice = true,
-	always_remember = true,
-	change_level = -1,
+	define_as = "FLOOR_ZONE_1_2",
+	name = "player 1's zone", image = "terrain/marble_floor.png",
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.STEEL_BLUE,
 }
 
 newEntity{
-	define_as = "DOWN",
-	name = "next level",
-	display = '>', color_r=255, color_g=255, color_b=0, back_color=colors.DARK_GREY,
-	notice = true,
-	always_remember = true,
-	change_level = 1,
+	define_as = "FLOOR_ZONE_2",
+	name = "player 2's zone", image = "terrain/marble_floor.png",
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.DARK_GREEN,
+}
+
+newEntity{
+	define_as = "FLOOR_ZONE_2",
+	name = "player 2's zone", image = "terrain/marble_floor.png",
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.YELLOW_GREEN,
+}
+
+newEntity{
+	define_as = "FLOOR_2",
+	name = "floor", image = "terrain/marble_floor.png",
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.ANTIQUE_WHITE,
 }
 
 newEntity{
 	define_as = "FLOOR",
 	name = "floor", image = "terrain/marble_floor.png",
-	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.DARK_GREY,
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.HONEYDEW,
 }
 
 newEntity{
@@ -63,21 +65,3 @@ newEntity{
 	dig = "FLOOR",
 }
 
-newEntity{
-	define_as = "DOOR",
-	name = "door", image = "terrain/granite_door1.png",
-	display = '+', color_r=238, color_g=154, color_b=77, back_color=colors.DARK_UMBER,
-	notice = true,
-	always_remember = true,
-	block_sight = true,
-	door_opened = "DOOR_OPEN",
-	dig = "DOOR_OPEN",
-}
-
-newEntity{
-	define_as = "DOOR_OPEN",
-	name = "open door", image = "terrain/granite_door1_open.png",
-	display = "'", color_r=238, color_g=154, color_b=77, back_color=colors.DARK_GREY,
-	always_remember = true,
-	door_closed = "DOOR",
-}
