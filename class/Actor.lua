@@ -217,9 +217,15 @@ function _M:postUseTalent(ab, ret)
 
 		who = tostring(self.uid)
 		talent = tostring(ab.id)
+		where = ""
+		if self.last_target then -- TODO: for multiple targets
+			where = "|"..self.last_target.x..","..self.last_target.y
+		end
 
-		Network.send("USETALENT".."|"..who.."|"..talent)
+		Network.send("USETALENT".."|"..who.."|"..talent..where)
 	end
+
+	self.last_target = nil
 
 	return true
 end

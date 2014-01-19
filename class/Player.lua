@@ -43,16 +43,16 @@ module(..., package.seeall, class.inherit(
 
 function _M:init(t, no_default)
 	t.display=t.display or '@'
-	t.color_r=t.color_r or 230
-	t.color_g=t.color_g or 230
-	t.color_b=t.color_b or 230
+	t.color_r=t.color_r or 180
+	t.color_g=t.color_g or 50
+	t.color_b=t.color_b or 70
 
 	t.player = true
 	t.type = t.type or "humanoid"
 	t.subtype = t.subtype or "player"
 	t.faction = t.faction or "players"
 
-	t.lite = t.lite or 0
+	t.lite = t.lite or 20
 
 	mod.class.Actor.init(self, t, no_default)
 	engine.interface.PlayerHotkeys.init(self, t)
@@ -144,6 +144,7 @@ end
 --- Tries to get a target from the user
 function _M:getTarget(typ)
 	local x, y, target = game:targetGetForPlayer(typ)
+	self.last_target = {x=x, y=y}
 	return x, y, target
 end
 

@@ -20,13 +20,13 @@
 newEntity{
 	define_as = "FLOOR_ZONE_1",
 	name = "player 1's zone", image = "terrain/marble_floor.png",
-	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.ROYAL_BLUE,
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color={r=130, g=150, b=220},
 }
 
 newEntity{
 	define_as = "FLOOR_ZONE_1_2",
 	name = "player 1's zone", image = "terrain/marble_floor.png",
-	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.STEEL_BLUE,
+	display = ' ', color_r=255, color_g=255, color_b=255, back_color={r=110, g=130, b=190},
 }
 
 newEntity{
@@ -36,7 +36,7 @@ newEntity{
 }
 
 newEntity{
-	define_as = "FLOOR_ZONE_2",
+	define_as = "FLOOR_ZONE_2_2",
 	name = "player 2's zone", image = "terrain/marble_floor.png",
 	display = ' ', color_r=255, color_g=255, color_b=255, back_color=colors.YELLOW_GREEN,
 }

@@ -60,3 +60,34 @@ newTalent{
 	end,
 }
 
+newTalentType{ type="cards", name = "cards", description = "Cards"}
+
+newTalent{
+	name = "Summon Wolf",
+	type = {"cards", 1},
+	points=1,
+	cooldown=0,
+	power=0,
+	range=5,
+	wolf = function(self)
+		return {
+			name="Wolf",
+			faction = self.faction,
+			ai="TEST",
+			ai_state = {},
+		}
+	end,
+	action = function(self, t)
+		local tg = {type="hit", range=5}
+		local x, y = self:getTarget(tg)
+		if not x or not y then return nil end
+		m = require("mod.class.NPC").new(t.wolf(self))
+		game.zone:addEntity(game.level, m, "actor", x, y)
+		return true
+	end,
+	info = function(self, t)
+		return "A wolf"
+	end
+
+}
+

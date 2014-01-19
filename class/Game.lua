@@ -48,7 +48,7 @@ local Network = require "mod.class.Network"
 module(..., package.seeall, class.inherit(engine.GameTurnBased, engine.interface.GameTargeting))
 
 function _M:init()
-	engine.GameTurnBased.init(self, engine.KeyBind.new(), 1, 1)
+	engine.GameTurnBased.init(self, engine.KeyBind.new(), 2, 1)
 
 	-- Pause at birth
 	self.paused = true
@@ -92,29 +92,23 @@ function _M:run()
 end
 
 function _M:newGame()
-	self.opponent = Opponent.new{name="Player 2"}
-	self.player = Player.new{name=self.player_name, game_ender=true, player=true}
+	self.opponent = Player.new{name="Player2", nil, faction="player_2"}
+	self.opponent.player = false
+	self.opponent.energy.value = 1
+	self.player = Player.new{name="Player1", faction="player_1"}
+	self.player.energy.value = self.energy_to_act
+
+	self.player:learnTalent(self.player.T_SUMMON_WOLF, true)
 	
 	Map:setViewerActor(self.player)
+	-- Tactical display on by default
+	Map:setViewerFaction("players")
 	self:setupDisplayMode()
-
-	self.creating_player = true
-	local birth = Birther.new(nil, self.player, {"base", "role" }, function()
-		self:changeLevel(1, "dungeon")
-		print("[PLAYER BIRTH] resolve...")
-		self.player:resolve()
-		self.player:resolve(nil, true)
-		self.player.energy.value = self.energy_to_act
-		self.paused = true
-		self.creating_player = false
-
-		
-		print("[PLAYER BIRTH] resolved!")
-	end)
 	self:changeLevel(1, "dungeon")
+
 	-- Add the opposing player to the map
+	--Zone:addEntity(self.level, self.player, "actor", 4, 4)
 	Zone:addEntity(self.level, self.opponent, "actor", 5, 5)
-	self:registerDialog(birth)
 end
 
 function _M:loaded()
@@ -189,6 +183,18 @@ function _M:getPlayer()
 	return self.player
 end
 
+function _M:switchPlayer()
+	tmp = self.player
+	self.player = self.opponent
+	self.opponent = tmp
+	self.player.player = true
+	self.opponent.player = false
+	Map:setViewerActor(self.player)
+	self.hotkeys_display.actor = self.player
+	self.npcs_display.actor = self.player
+
+end
+
 --- Says if this savefile is usable or not
 function _M:isLoadable()
 	return not self:getPlayer(true).dead
@@ -204,7 +210,8 @@ function _M:tick()
 		-- engine.GameEnergyBased.tick(self)
 	end
 	-- When paused (waiting for player input) we return true: this means we wont be called again until an event wakes us
-	if self.paused and not savefile_pipe.saving then return true end
+	self.paused = true
+	return false
 end
 
 --- Called every game turns

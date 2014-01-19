@@ -55,6 +55,7 @@ ActorStats:defineStat("Constitution",	"con", 10, 1, 100, "Constitution defines y
 
 -- Actor AIs
 ActorAI:loadDefinition("/engine/ai/")
+ActorAI:loadDefinition("/mod/ai/")
 
 -- Birther descriptor
 Birther:loadDefinition("/data/birth/descriptors.lua")
