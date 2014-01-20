@@ -45,6 +45,8 @@ local Tooltip = require "engine.Tooltip"
 local QuitDialog = require "mod.dialogs.Quit"
 local Network = require "mod.class.Network"
 
+local MenuDialog = require "mod.dialogs.MenuDialog"
+
 module(..., package.seeall, class.inherit(engine.GameTurnBased, engine.interface.GameTargeting))
 
 function _M:init()
@@ -104,11 +106,13 @@ function _M:newGame()
 	-- Tactical display on by default
 	Map:setViewerFaction("players")
 	self:setupDisplayMode()
+
 	self:changeLevel(1, "dungeon")
 
 	-- Add the opposing player to the map
 	--Zone:addEntity(self.level, self.player, "actor", 4, 4)
 	Zone:addEntity(self.level, self.opponent, "actor", 5, 5)
+	game:registerDialog(MenuDialog.new())
 end
 
 function _M:loaded()

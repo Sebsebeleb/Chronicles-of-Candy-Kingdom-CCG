@@ -3,8 +3,9 @@ module(..., package.seeall)
 
 local connection = nil
 
-function host()
-	server = socket.bind("*","7520")
+function host(port)
+	local port = port or "7520"
+	server = socket.bind("*", port)
 	connection = server:accept()
 	connection:settimeout(0)
 
@@ -61,8 +62,6 @@ function handle_data(data)
 		local target = {x=0, y=0}
 		if tgt then
 			local pos = string.split(tgt, ",")
-			target.x = pos[1]
-			target.y = pos[2]
 			target = {x=pos[1], y=pos[2]}
 		end
 
