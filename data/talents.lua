@@ -63,7 +63,7 @@ newTalent{
 newTalentType{ type="cards", name = "cards", description = "Cards"}
 
 newTalent{
-	name = "Summon Wolf",
+	name = "Summon Jellybean Candy",
 	type = {"cards", 1},
 	points=1,
 	cooldown=0,
@@ -71,7 +71,7 @@ newTalent{
 	range=5,
 	wolf = function(self)
 		return {
-			name="Wolf",
+			name="Jellybean",
 			faction = self.faction,
 			ai="TEST",
 			ai_state = {},
@@ -86,7 +86,7 @@ newTalent{
 		return true
 	end,
 	info = function(self, t)
-		return "A wolf"
+		return "A jellybean"
 	end
 
 }
