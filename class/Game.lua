@@ -228,6 +228,22 @@ function _M:onTurn()
 	self.level.map:processEffects()
 end
 
+function _M:displayCards()
+	local hand = game.player:getInven("HAND")
+	if hand then
+		local x = 100
+		local y = 50
+		local w = 64
+		local h = 64
+		local bx = 20
+		for i, card in ipairs(hand) do
+			tx = core.display.loadImage(card.image):glTexture()
+			tx:toScreenFull(x, y, w, h, w, h)
+			x = x + w + bx
+		end
+	end
+end
+
 function _M:display(nb_keyframe)
 	-- If switching resolution, blank everything but the dialog
 	if self.change_res_dialog then engine.GameTurnBased.display(self, nb_keyframe) return end
@@ -247,6 +263,8 @@ function _M:display(nb_keyframe)
 		-- And the minimap
 		self.level.map:minimapDisplay(self.w - 200, 20, util.bound(self.player.x - 25, 0, self.level.map.w - 50), util.bound(self.player.y - 25, 0, self.level.map.h - 50), 50, 50, 0.6)
 	end
+
+	self:displayCards()
 
 	-- We display the player's interface
 	self.flash:toScreen(nb_keyframe)

@@ -28,6 +28,7 @@ local ActorLevel = require "engine.interface.ActorLevel"
 local ActorTemporaryEffects = require "engine.interface.ActorTemporaryEffects"
 local Birther = require "engine.Birther"
 local Faction = require "engine.Faction"
+local ActorInventory = require "engine.interface.ActorInventory"
 
 -- Setupd simple factions
 Faction:add{ name="player_1", reaction={player_2=-100} }
@@ -44,6 +45,9 @@ ActorTalents:loadDefinition("/data/talents.lua")
 
 -- Timed Effects
 ActorTemporaryEffects:loadDefinition("/data/timed_effects.lua")
+
+-- Cards
+ActorInventory:defineInventory("HAND", "your cards", false, "Your cards")
 
 -- Actor resources
 ActorResource:defineResource("Power", "power", nil, "power_regen", "Power represent your ability to use special talents.")

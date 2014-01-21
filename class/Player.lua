@@ -29,6 +29,7 @@ local ActorTalents = require "engine.interface.ActorTalents"
 local DeathDialog = require "mod.dialogs.DeathDialog"
 local Astar = require"engine.Astar"
 local DirectPath = require"engine.DirectPath"
+local ActorInventory = require "engine.interface.ActorInventory"
 
 --- Defines the player
 -- It is a normal actor, with some redefined methods to handle user interaction.<br/>
@@ -38,7 +39,8 @@ module(..., package.seeall, class.inherit(
 	engine.interface.PlayerRest,
 	engine.interface.PlayerRun,
 	engine.interface.PlayerMouse,
-	engine.interface.PlayerHotkeys
+	engine.interface.PlayerHotkeys,
+	engine.interface.ActorInventory
 ))
 
 function _M:init(t, no_default)
@@ -52,10 +54,13 @@ function _M:init(t, no_default)
 	t.subtype = t.subtype or "player"
 	t.faction = t.faction or "players"
 
+	t.body = { HAND = 10 }
+
 	t.lite = t.lite or 20
 
 	mod.class.Actor.init(self, t, no_default)
 	engine.interface.PlayerHotkeys.init(self, t)
+	engine.interface.ActorInventory.init(self, t)
 
 	self.descriptor = {}
 end
