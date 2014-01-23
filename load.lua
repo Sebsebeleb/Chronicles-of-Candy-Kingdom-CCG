@@ -47,6 +47,7 @@ ActorTalents:loadDefinition("/data/talents.lua")
 ActorTemporaryEffects:loadDefinition("/data/timed_effects.lua")
 
 -- Cards
+ActorInventory:defineInventory("DECK", "your deck", false, "Your deck")
 ActorInventory:defineInventory("HAND", "your cards", false, "Your cards")
 
 -- Actor resources

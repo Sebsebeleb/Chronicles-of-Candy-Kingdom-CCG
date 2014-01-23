@@ -195,8 +195,6 @@ end
 function _M:postUseTalent(ab, ret)
 	if not ret then return end
 
-	self:useEnergy()
-
 	if ab.mode == "sustained" then
 		if not self:isTalentActive(ab.id) then
 			if ab.sustain_power then

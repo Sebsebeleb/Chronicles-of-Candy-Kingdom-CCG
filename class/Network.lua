@@ -51,8 +51,8 @@ function handle_data(data)
 	
 
 	if command == "ENDTURN" then
-		game.opponent:useEnergy()
 		game.paused=false
+		game.opponent:useEnergy()
 		game.log("It is now your turn.")
 
 	elseif command == "USETALENT" then

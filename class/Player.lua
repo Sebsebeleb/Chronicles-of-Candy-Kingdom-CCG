@@ -54,7 +54,7 @@ function _M:init(t, no_default)
 	t.subtype = t.subtype or "player"
 	t.faction = t.faction or "players"
 
-	t.body = { HAND = 10 }
+	t.body = { HAND = 10, DECK=30}
 
 	t.lite = t.lite or 20
 
@@ -62,6 +62,7 @@ function _M:init(t, no_default)
 	engine.interface.PlayerHotkeys.init(self, t)
 	engine.interface.ActorInventory.init(self, t)
 
+	--TODO: Change, temporary solution
 	self.descriptor = {}
 end
 
@@ -202,5 +203,14 @@ end
 --- Move with the mouse
 -- We just feed our spotHostile to the interface mouseMove
 function _M:mouseMove(tmx, tmy)
-	return engine.interface.PlayerMouse.mouseMove(self, tmx, tmy, spotHostiles)
+	return false -- We dont move
+	--return engine.interface.PlayerMouse.mouseMove(self, tmx, tmy, spotHostiles)
+end
+
+function _M:drawCard()
+	--TODO: Opponents drawing shouldn't _actually_ draw
+	deck = self:getInven("DECK")
+	item = deck[#deck]
+	item = self:removeObject(deck, #deck)
+	self:addObject("HAND", item)
 end

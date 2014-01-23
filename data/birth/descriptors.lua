@@ -40,7 +40,7 @@ newBirthDescriptor{
 	},
 	talents = {
 		[ActorTalents.T_KICK]=1,
-		[ActorTalents.T_SUMMON_WOLF]=1,
+		[ActorTalents.T_SUMMON_JELLYBEAN_CANDY]=1,
 	},
 }
 

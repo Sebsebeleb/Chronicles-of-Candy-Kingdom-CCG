@@ -41,6 +41,7 @@ local LogFlasher = require "engine.LogFlasher"
 local DebugConsole = require "engine.DebugConsole"
 local FlyingText = require "engine.FlyingText"
 local Tooltip = require "engine.Tooltip"
+local Button = require "engine.ui.Button"
 
 local QuitDialog = require "mod.dialogs.Quit"
 local Network = require "mod.class.Network"
@@ -100,8 +101,6 @@ function _M:newGame()
 	self.player = Player.new{name="Player1", faction="player_1"}
 	self.player.energy.value = self.energy_to_act
 
-	self.player:learnTalent(self.player.T_SUMMON_WOLF, true)
-	
 	Map:setViewerActor(self.player)
 	-- Tactical display on by default
 	Map:setViewerFaction("players")
@@ -111,8 +110,22 @@ function _M:newGame()
 
 	-- Add the opposing player to the map
 	--Zone:addEntity(self.level, self.player, "actor", 4, 4)
-	Zone:addEntity(self.level, self.opponent, "actor", 5, 5)
+	Zone:addEntity(self.level, self.opponent, "actor", 3, 16)
 	game:registerDialog(MenuDialog.new())
+
+	-- TODO: Temporary solution
+
+	for i=1, 20 do
+		item = game.zone:makeEntityByName(game.level, "object", "CARD_SUMMON_JELLYBEAN_CANDY")
+		game.opponent:addObject(game.opponent:getInven("DECK"), item)
+		item = game.zone:makeEntityByName(game.level, "object", "CARD_SUMMON_JELLYBEAN_CANDY")
+		game.player:addObject(game.player:getInven("DECK"), item)
+	end
+	for i=1, 6 do
+		game.opponent:drawCard()
+		game.player:drawCard()
+	end
+
 end
 
 function _M:loaded()
@@ -204,6 +217,12 @@ function _M:isLoadable()
 	return not self:getPlayer(true).dead
 end
 
+function _M:endTurn()
+	if not self.player:enoughEnergy() then return end -- Not our turn, we cant end our turn
+	self.player:useEnergy()
+	Network.end_turn()
+end
+
 function _M:tick()
 	if self.level then
 		self:targetOnTick()
@@ -232,7 +251,7 @@ function _M:displayCards()
 	local hand = game.player:getInven("HAND")
 	if hand then
 		local x = 100
-		local y = 50
+		local y = self.h - 100
 		local w = 64
 		local h = 64
 		local bx = 20
@@ -242,6 +261,11 @@ function _M:displayCards()
 			x = x + w + bx
 		end
 	end
+end
+
+function _M:displayUi()
+	local button_end_turn = core.display.loadImage("/data/gfx/ui/end_turn.png"):glTexture()
+	button_end_turn:toScreenFull(self.w - 200, self.h- 200, 175, 90, 175, 90)
 end
 
 function _M:display(nb_keyframe)
@@ -265,6 +289,7 @@ function _M:display(nb_keyframe)
 	end
 
 	self:displayCards()
+	self:displayUi()
 
 	-- We display the player's interface
 	self.flash:toScreen(nb_keyframe)
@@ -295,25 +320,25 @@ function _M:setupCommands()
 	self.key:unicodeInput(true)
 	self.key:addBinds
 	{
-		-- Movements
-		MOVE_LEFT = function() self.player:moveDir(4) end,
-		MOVE_RIGHT = function() self.player:moveDir(6) end,
-		MOVE_UP = function() self.player:moveDir(8) end,
-		MOVE_DOWN = function() self.player:moveDir(2) end,
-		MOVE_LEFT_UP = function() self.player:moveDir(7) end,
-		MOVE_LEFT_DOWN = function() self.player:moveDir(1) end,
-		MOVE_RIGHT_UP = function() self.player:moveDir(9) end,
-		MOVE_RIGHT_DOWN = function() self.player:moveDir(3) end,
-		MOVE_STAY = function() self.player:useEnergy() end,
+		-- Movements - We dont move
+		--MOVE_LEFT = function() self.player:moveDir(4) end,
+		--MOVE_RIGHT = function() self.player:moveDir(6) end,
+		--MOVE_UP = function() self.player:moveDir(8) end,
+		--MOVE_DOWN = function() self.player:moveDir(2) end,
+		--MOVE_LEFT_UP = function() self.player:moveDir(7) end,
+		--MOVE_LEFT_DOWN = function() self.player:moveDir(1) end,
+		--MOVE_RIGHT_UP = function() self.player:moveDir(9) end,
+		--MOVE_RIGHT_DOWN = function() self.player:moveDir(3) end,
+		--MOVE_STAY = function() self.player:useEnergy() end,
 
-		RUN_LEFT = function() self.player:runInit(4) end,
-		RUN_RIGHT = function() self.player:runInit(6) end,
-		RUN_UP = function() self.player:runInit(8) end,
-		RUN_DOWN = function() self.player:runInit(2) end,
-		RUN_LEFT_UP = function() self.player:runInit(7) end,
-		RUN_LEFT_DOWN = function() self.player:runInit(1) end,
-		RUN_RIGHT_UP = function() self.player:runInit(9) end,
-		RUN_RIGHT_DOWN = function() self.player:runInit(3) end,
+		--RUN_LEFT = function() self.player:runInit(4) end,
+		--RUN_RIGHT = function() self.player:runInit(6) end,
+		--RUN_UP = function() self.player:runInit(8) end,
+		--RUN_DOWN = function() self.player:runInit(2) end,
+		--RUN_LEFT_UP = function() self.player:runInit(7) end,
+		--RUN_LEFT_DOWN = function() self.player:runInit(1) end,
+		--RUN_RIGHT_UP = function() self.player:runInit(9) end,
+		--RUN_RIGHT_DOWN = function() self.player:runInit(3) end,
 
 		-- Hotkeys
 		HOTKEY_1 = function() self.player:activateHotkey(1) end,
@@ -449,6 +474,39 @@ function _M:setupMouse(reset)
 	self.mouse:registerZone(self.hotkeys_display.display_x, self.hotkeys_display.display_y, self.w, self.h, function(button, mx, my, xrel, yrel, bx, by, event)
 		self.hotkeys_display:onMouse(button, mx, my, event == "button", function(text) self.tooltip:displayAtMap(nil, nil, self.w, self.h, tostring(text)) end)
 	end)
+	-- Setup card usage zones
+	local x = 100
+	local y = self.h - 100
+	local w = 64
+	local h = 64
+	local border = 0
+	self.mouse:registerZone(x, y, self.w, h, function(button, mx, my, xrel, yrel, bx, by, event)
+		if button == "left" then
+			local hand = game.player and game.player:getInven("HAND")
+			if hand then
+				if not ((my >= y) and (my <= y+h)) then game.log("c") return end
+				i = math.ceil((mx - x)  / (w + border)) -- which card is selected
+				if i * w < mx-x then game.log("d") return end --it is in the border area, ignore
+				if hand[i] then
+					if game.player:enoughEnergy() then
+						game.player:forceUseTalent(hand[i].talent, {})
+						game.player:removeObject(hand, i)
+					else
+						game.log("It is not your turn")
+					end
+				end
+			end
+		end 
+	end)
+
+	-- Setup ui zones
+	-- End turn button
+	self.mouse:registerZone(self.w - 200, self.h - 200, 175, 90, function(button, mx, my, xrel, yrel, bx, by, event)
+		if button =="left" then
+			self:endTurn()
+		end
+	end)
+
 	self.mouse:setCurrent()
 end
 
