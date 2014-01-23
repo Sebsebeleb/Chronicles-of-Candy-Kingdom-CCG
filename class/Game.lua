@@ -51,7 +51,7 @@ local MenuDialog = require "mod.dialogs.MenuDialog"
 module(..., package.seeall, class.inherit(engine.GameTurnBased, engine.interface.GameTargeting))
 
 function _M:init()
-	engine.GameTurnBased.init(self, engine.KeyBind.new(), 2, 1)
+	engine.GameTurnBased.init(self, engine.KeyBind.new(), 1, 1)
 
 	-- Pause at birth
 	self.paused = true
@@ -97,7 +97,7 @@ end
 function _M:newGame()
 	self.opponent = Player.new{name="Player2", nil, faction="player_2"}
 	self.opponent.player = false
-	self.opponent.energy.value = 1
+	self.opponent.energy.value = 0
 	self.player = Player.new{name="Player1", faction="player_1"}
 	self.player.energy.value = self.energy_to_act
 
